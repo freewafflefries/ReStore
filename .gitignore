@@ -1,1 +1,4 @@
 /.vscode
+.fake
+.ionide
+/API/appsettings.json
