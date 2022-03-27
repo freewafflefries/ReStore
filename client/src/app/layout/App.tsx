@@ -1,0 +1,43 @@
+import React, { useState } from 'react';
+import './styles.css';
+
+import Catalog from '../../features/catalog/Catalog';
+
+import Header from './Header';
+import { Container, createTheme, CssBaseline } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/system';
+
+
+
+
+
+function App() {
+
+  const [darkMode, setDarkMode] = useState(false)
+  const paletteType = darkMode ? 'dark' : 'light'
+  const handleToggleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
+
+  const theme = createTheme({
+    palette: {
+      mode: paletteType,
+      background: {
+        default: paletteType === 'light' ? '#eaeaea' : '#121212'
+      }
+    }
+  })
+
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header handleToggleDarkMode={handleToggleDarkMode}/>
+      <Container>
+        <Catalog />
+      </Container>
+    </ThemeProvider>
+  );
+}
+
+export default App;

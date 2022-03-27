@@ -32,7 +32,7 @@ namespace API
             });
 
             //Our DB Context is a service, so we must configure here
-            services.AddDbContext<StoreContext>(opt => 
+            services.AddDbContext<StoreContext>(opt =>
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
@@ -51,6 +51,14 @@ namespace API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(opt =>
+            {
+                opt.AllowAnyHeader()
+                .AllowAnyMethod()
+                
+                .WithOrigins("http://localhost:3000");
+            });
 
             app.UseAuthorization();
 
