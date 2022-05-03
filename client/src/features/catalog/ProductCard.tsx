@@ -1,28 +1,46 @@
-import { Avatar,  Button,  Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@material-ui/core";
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@material-ui/core";
+import { SettingsBackupRestoreTwoTone } from "@material-ui/icons";
+import { LoadingButton } from "@material-ui/lab";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import agent from "../../app/api/agent";
+import { useStoreContext } from "../../app/context/StoreContext";
 import { Product } from "../../app/models/product";
 
 interface Props {
-    product: Product
+  product: Product
 }
 
-export default function ProductCard({product}: Props) {
+export default function ProductCard({ product }: Props) {
 
-    return(
+  const [loading, setLoading] = useState(false);
+
+  const {setBasket} = useStoreContext();
+
+  function handleAddItem(productId: number) {
+    setLoading(true);
+
+    agent.Basket.addItem(productId)
+      .then(basket => setBasket(basket))
+      .catch(error => console.log(error))
+      .finally(() => setLoading(false))
+  }
+
+  return (
     <Card>
-        <CardHeader 
-            avatar={
-                <Avatar sx={{bgcolor: 'secondary.main'}}>
-                    {product.name.charAt(0).toUpperCase()}
-                </Avatar>
-            }
-            title={product.name}
-            titleTypographyProps={{
-                sx: {fontWeight: 'bold', color: 'secondary.main'}
-            }}
-        />
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: 'secondary.main' }}>
+            {product.name.charAt(0).toUpperCase()}
+          </Avatar>
+        }
+        title={product.name}
+        titleTypographyProps={{
+          sx: { fontWeight: 'bold', color: 'secondary.main' }
+        }}
+      />
       <CardMedia
-        sx={{ height: 140, backgroundSize: 'contain', bgcolor:'primary.light' }}
+        sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'primary.light' }}
         image={product.pictureUrl}
         title={product.name}
       />
@@ -35,9 +53,9 @@ export default function ProductCard({product}: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add to cart</Button>
+        <LoadingButton loading={loading} onClick={() => handleAddItem(product.id)} size="small">Add to cart</LoadingButton>
         <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
-    )
+  )
 }
