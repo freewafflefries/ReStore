@@ -1,9 +1,9 @@
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography } from "@material-ui/core";
 import { ShoppingCart } from "@material-ui/icons";
 import { Link, NavLink } from "react-router-dom";
-import { cursorTo } from "readline";
-import { useStoreContext } from "../context/StoreContext";
-import { BasketItem } from "../models/baskets";
+
+import { useAppSelector } from "../store/configureStore";
+
 
 
 interface Props {
@@ -35,8 +35,8 @@ const navStyles = {
 
 export default function Header({handleToggleDarkMode}: Props) {
 
-    const {basket} = useStoreContext();
-
+    const {basket} = useAppSelector(state => state.basket);
+    
     const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
 
     return(

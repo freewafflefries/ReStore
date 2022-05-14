@@ -1,11 +1,12 @@
-import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@material-ui/core";
-import { PreviewTwoTone } from "@material-ui/icons";
-import { useStoreContext } from "../../app/context/StoreContext";
+import { TableContainer, Paper, Table, TableBody, TableRow, TableCell} from "@material-ui/core";
+
+
+import { useAppSelector } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/util/util";
 
 export default function BasketSummary() {
     
-    const {basket} = useStoreContext()
+    const {basket} = useAppSelector(state => state.basket)
     
     function calculateSubtotal() {
         if (!basket) return 0

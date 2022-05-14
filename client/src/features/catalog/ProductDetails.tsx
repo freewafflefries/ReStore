@@ -2,53 +2,48 @@ import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, T
 import { LoadingButton } from "@material-ui/lab";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/context/StoreContext";
+
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Product } from "../../app/models/product";
+
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { addBasketItemAsync, setBasket } from "../basket/basketSlice";
+import { fetchProductAsync, productSelectors } from "./catalogSlice";
 
 export default function ProductDetails() {
 
-    const {id} = useParams<{id: string}>();
-    const [product, setProduct] = useState<Product | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { status } = useAppSelector(state => state.basket)
+    const { id } = useParams<{ id: string }>();
+    const product = useAppSelector(state => productSelectors.selectById(state, id))
+    const { status: productStatus } = useAppSelector(state => state.catalog)
     const [buttonLoading, setButtonLoading] = useState(false)
 
-    
-  const {setBasket} = useStoreContext();
 
-  function handleAddItem(productId: number) {
-    setButtonLoading(true);
 
-    agent.Basket.addItem(productId)
-      .then(basket => setBasket(basket))
-      .catch(error => console.log(error))
-      .finally(() => setButtonLoading(false))
-  }
+    const dispatch = useAppDispatch()
+
+    function handleAddItem(productId: number) {
+        setButtonLoading(true);
+
+        dispatch(addBasketItemAsync({ productId, quantity: 1 }))
+    }
 
     useEffect(() => {
-       agent.Catalog.details(parseInt(id))
-            .then(response =>  {
-                console.log(response)
-                setProduct(response)
-            })
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false))
-    }, [id])
+        if (!product) dispatch(fetchProductAsync(parseInt(id)))
+    }, [id, dispatch, product])
 
-    if (loading) return <LoadingComponent message="Loading Product..." />
+    if (productStatus.includes('pending')) return <LoadingComponent message="Loading Product..." />
 
     if (!product) return <NotFound />
 
     return (
         <Grid container spacing={6}>
             <Grid item xs={6}>
-                <img src={product.pictureUrl} alt={product.name} style={{width: '100%'}}/>
+                <img src={product.pictureUrl} alt={product.name} style={{ width: '100%' }} />
             </Grid>
             <Grid item xs={6}>
                 <Typography variant='h4'>{product.name}</Typography>
-                <Divider sx={{mb: 2}}/>
+                <Divider sx={{ mb: 2 }} />
                 <Typography variant='h4' color='secondary'>${(product.price / 100).toFixed(2)}</Typography>
                 <TableContainer>
                     <Table>
@@ -73,17 +68,17 @@ export default function ProductDetails() {
                                 <TableCell>In Stock</TableCell>
                                 <TableCell>{product.quantityInStock}</TableCell>
                             </TableRow>
-                            
+
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <LoadingButton 
-                    loading={buttonLoading}
-                    variant='contained' 
+                <LoadingButton
+                    loading={status.includes('pending')}
+                    variant='contained'
                     size='small'
-                    sx={{marginTop:5}}
+                    sx={{ marginTop: 5 }}
                     onClick={() => handleAddItem(parseInt(id))}>
-                        Add to Cart
+                    Add to Cart
                 </LoadingButton>
             </Grid>
         </Grid>

@@ -13,7 +13,7 @@ axios.interceptors.response.use(async response => {
     await sleep();
     return response
 }, (error: AxiosError) => {
-    const {data, status} = error.response!
+    const { data, status } = error.response!
     switch (status) {
         case 400:
             if (data.errors) {
@@ -30,15 +30,15 @@ axios.interceptors.response.use(async response => {
         case 401:
             toast.error(data.title)
             break;
-       
+
         case 500:
             history.push({
                 pathname: '/server-error',
-                state: {error: data}
+                state: { error: data }
             })
             toast.error(data.title)
-            break;        
-    
+            break;
+
         default:
             toast.error("An unspecified error occurred")
             break;
