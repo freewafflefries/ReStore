@@ -1,6 +1,7 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,6 +38,8 @@ namespace API
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,11 +60,13 @@ namespace API
             app.UseCors(opt =>
             {
                 opt.AllowAnyHeader()
+                .WithHeaders()
                 .AllowAnyMethod()
                 .AllowAnyOrigin()
                 .AllowCredentials()
+                .WithExposedHeaders("Pagination")
                 .WithOrigins("http://localhost:3000");
-                
+
 
             });
 
