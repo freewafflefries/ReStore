@@ -12,9 +12,9 @@ export default function AboutPage() {
             .catch((error) => {
                 setValidationErrors(error)
             })
-              
-            
-        
+
+
+
 
     }
 
@@ -30,16 +30,16 @@ export default function AboutPage() {
                 <Button variant='contained' onClick={() => agent.TestErrors.get500Error().catch(error => console.log(error))}>Test 500 Error</Button>
                 <Button variant='contained' onClick={getVaidationError}>Test Validation Error</Button>
             </ButtonGroup>
-            {setValidationErrors.length > 0 && 
+            {validationErrors.length > 0 &&
                 <Alert severity='error'>
                     <AlertTitle>Validation Errors</AlertTitle>
                     <List>
                         {validationErrors.map((error) => {
-                            return ( <ListItem key={error}>
-                                    <ListItemText>
-                                        {error}
-                                    </ListItemText>
-                                </ListItem>
+                            return (<ListItem key={error}>
+                                <ListItemText>
+                                    {error}
+                                </ListItemText>
+                            </ListItem>
                             )
                         })}
                     </List>

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { Product } from "../../app/models/product";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { addBasketItemAsync, setBasket } from "../basket/basketSlice";
+import { addBasketItemAsync } from "../basket/basketSlice";
 
 interface Props {
   product: Product
@@ -14,10 +14,10 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
 
-  const {status} = useAppSelector (state => state.basket)
+  const { status } = useAppSelector(state => state.basket)
   const dispatch = useAppDispatch()
 
-  
+
 
   return (
     <Card>
@@ -46,7 +46,7 @@ export default function ProductCard({ product }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <LoadingButton loading={status.includes('pendingAddItem'+product.id)} onClick={() => dispatch(addBasketItemAsync({productId: product.id}))} size="small">Add to cart</LoadingButton>
+        <LoadingButton loading={status.includes('pendingAddItem' + product.id)} onClick={() => dispatch(addBasketItemAsync({ productId: product.id }))} size="small">Add to cart</LoadingButton>
         <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
