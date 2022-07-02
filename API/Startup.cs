@@ -1,19 +1,14 @@
 using System.Text;
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
 using Microsoft.OpenApi.Models;
-
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Middleware;
 using API.Entities;
-using Microsoft.AspNetCore.Identity;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -76,7 +71,7 @@ namespace API
             {
                 opt.User.RequireUniqueEmail = true;
             })
-                .AddRoles<IdentityRole>()
+                .AddRoles<Role>()
                 .AddEntityFrameworkStores<StoreContext>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>

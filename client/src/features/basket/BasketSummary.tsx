@@ -1,32 +1,40 @@
-import { TableContainer, Paper, Table, TableBody, TableRow, TableCell} from "@material-ui/core";
+import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from "@material-ui/core";
 
 
 import { useAppSelector } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/util/util";
 
-export default function BasketSummary() {
-    
-    const {basket} = useAppSelector(state => state.basket)
-    
+interface Props {
+    providedSubtotal?: number
+}
+
+export default function BasketSummary({ providedSubtotal }: Props) {
+
+    const { basket } = useAppSelector(state => state.basket)
+
     function calculateSubtotal() {
         if (!basket) return 0
-        const subtotal = basket?.items.reduce((sum, item) => {
-            return sum + (item.price * item.quantity)
-        },0)
+        if (providedSubtotal === undefined) {
+            const calculatedSubtotal = basket?.items.reduce((sum, item) => {
+                return sum + (item.price * item.quantity)
+            }, 0)
 
-        return subtotal
+            return calculatedSubtotal
+        }
+        return providedSubtotal
+
     }
 
-    function calculateDeliveryFee() {
-        if (subtotal/100 >= 100.00) {
+    function calculateDeliveryFee(sub: number) {
+        if (sub / 100 >= 100.00) {
             return 0
         } else {
             return 500
         }
     }
-    
+
     const subtotal = calculateSubtotal()
-    const deliveryFee = calculateDeliveryFee()
+    const deliveryFee = calculateDeliveryFee(subtotal)
 
     return (
         <>
@@ -47,7 +55,7 @@ export default function BasketSummary() {
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <span style={{fontStyle: 'italic'}}>*Orders over $100 qualify for free delivery</span>
+                                <span style={{ fontStyle: 'italic' }}>*Orders over $100 qualify for free delivery</span>
                             </TableCell>
                         </TableRow>
                     </TableBody>
