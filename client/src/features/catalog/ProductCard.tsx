@@ -42,7 +42,7 @@ export default function ProductCard({ product }: Props) {
           ${(product.price / 100).toFixed(2)}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {product.brand} / {product.type} / {product.id}
+          {product.brand} / {product.type}
         </Typography>
       </CardContent>
       <CardActions>

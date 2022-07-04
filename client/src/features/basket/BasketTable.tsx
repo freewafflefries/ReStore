@@ -4,6 +4,7 @@ import { LoadingButton } from "@material-ui/lab";
 import { BasketItem } from "../../app/models/baskets";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/util/util";
+import { productSelectors } from "../catalog/catalogSlice";
 import { removeBasketItemAsync, addBasketItemAsync } from "./basketSlice";
 
 interface Props {
@@ -45,14 +46,14 @@ export default function BasketTable({ items, isBasket = true }: Props) {
                             <TableCell align="center">
                                 {isBasket && <><LoadingButton
                                     color='error'
-                                    loading={status.includes('pendingRemoveItem' + item.productId)}
+                                    loading={status.includes('pendingRemoveItem' + item.productId + '*')}
                                     onClick={() => dispatch(removeBasketItemAsync({ productId: item.productId, quantity: 1 }))}>
                                     <Remove />
                                 </LoadingButton> </>}
                                 {item.quantity}
                                 {isBasket && <><LoadingButton
                                     color='secondary'
-                                    loading={status.includes('pendingAddItem' + item.productId)}
+                                    loading={status.includes('pendingAddItem' + item.productId + '*')}
                                     onClick={() => dispatch(addBasketItemAsync({ productId: item.productId, quantity: 1 }))}>
                                     <Add />
                                 </LoadingButton> </>}
@@ -61,7 +62,7 @@ export default function BasketTable({ items, isBasket = true }: Props) {
                             {isBasket && <TableCell align="right">
                                 <LoadingButton
                                     color='primary'
-                                    loading={status.includes('pendingRemoveItem' + item.productId)}
+                                    loading={false}
                                     onClick={() => dispatch(removeBasketItemAsync({ productId: item.productId, quantity: item.quantity }))}>
                                     <Delete />
                                 </LoadingButton>
