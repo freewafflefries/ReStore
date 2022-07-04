@@ -42,11 +42,11 @@ export default function ProductCard({ product }: Props) {
           ${(product.price / 100).toFixed(2)}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {product.brand} / {product.type}
+          {product.brand} / {product.type} / {product.id}
         </Typography>
       </CardContent>
       <CardActions>
-        <LoadingButton loading={status.includes('pendingAddItem' + product.id)} onClick={() => dispatch(addBasketItemAsync({ productId: product.id }))} size="small">Add to cart</LoadingButton>
+        <LoadingButton loading={status.includes('pendingAddItem' + product.id + '*')} onClick={() => dispatch(addBasketItemAsync({ productId: product.id }))} size="small">Add to cart</LoadingButton>
         <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
