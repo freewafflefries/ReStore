@@ -8,6 +8,8 @@ import { createBrowserHistory } from 'history'
 import { StoreProvider } from './app/context/StoreContext';
 import { Provider } from 'react-redux';
 import { store } from './app/store/configureStore';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css'
 
 
 export const history = createBrowserHistory()
