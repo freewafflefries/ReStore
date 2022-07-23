@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System;
+using API.RequestHelpers;
 
 namespace API
 {
@@ -31,6 +32,7 @@ namespace API
         {
 
             services.AddControllers();
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -123,6 +125,7 @@ namespace API
             services.AddAuthorization();
             services.AddScoped<TokenService>();
             services.AddScoped<PaymentService>();
+            services.AddScoped<ImageService>();
 
         }
 

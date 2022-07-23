@@ -21,7 +21,7 @@ export const signInUser = createAsyncThunk<User, FieldValues, {}>(
     async (data, thunkApi) => {
         try {
             //console.log('signInUser async Thunk', data)
-            const userDto = await agent.Account.login(data)
+            const userDto: any = await agent.Account.login(data)
             //This trick in destructuring allows use to break off basket its own object,
             //and then everything else from userDto into another object called user
             const { basket, ...user } = userDto;
@@ -75,7 +75,9 @@ export const accountSlice = createSlice({
             history.push('/')
         },
         setUser: (state: any, action: any) => {
-            state.user = action.payload;
+            let claims = JSON.parse(atob(action.payload.token.split('.')[1]))
+            let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+            state.user = { ...action.payload, roles: typeof (roles) === 'string' ? [roles] : roles }
         }
     },
 
@@ -87,7 +89,10 @@ export const accountSlice = createSlice({
             history.push('/')
         })
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state: any, action) => {
-            state.user = action.payload
+            let claims = JSON.parse(atob(action.payload.token.split('.')[1]))
+            let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+            state.user = { ...action.payload, roles: typeof (roles) === 'string' ? [roles] : roles }
+
         })
         builder.addMatcher(isAnyOf(signInUser.rejected, fetchCurrentUser.rejected), (state: any, action) => {
             throw action.payload
