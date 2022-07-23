@@ -1,8 +1,12 @@
 import { TextField } from "@material-ui/core";
+
 import { useController, UseControllerProps } from "react-hook-form";
 
 interface Props extends UseControllerProps {
     label: string;
+    multiline?: boolean;
+    rows?: number;
+    type?: string;
 }
 
 export default function AppTextInput(props: Props) {
@@ -17,6 +21,9 @@ export default function AppTextInput(props: Props) {
             variant='outlined'
             error={!!fieldState.error}
             helperText={fieldState.error?.message}
+            multiline={props.multiline}
+            rows={props.rows}
+            type={props.type}
         />
 
 

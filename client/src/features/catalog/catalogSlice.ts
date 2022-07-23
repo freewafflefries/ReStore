@@ -102,6 +102,14 @@ export const catalogSlice = createSlice({
         },
         resetProductParams: (state: any) => {
             state.productParams = initParams();
+        },
+        setProduct: (state: any, action: any) => {
+            productsAdaptor.upsertOne(state, action.payload)
+            state.productsLoaded = false
+        },
+        removeProduct: (state: any, action: any) => {
+            productsAdaptor.removeOne(state, action.payload)
+            state.productsLoaded = false
         }
     },
     extraReducers: (builder => {
@@ -125,7 +133,7 @@ export const catalogSlice = createSlice({
             state.status = 'idle'
         });
         builder.addCase(fetchProductAsync.rejected, (state, action) => {
-            console.log(action)
+
             state.status = 'idle'
         });
         builder.addCase(fetchFilters.pending, (state) => {
@@ -138,11 +146,11 @@ export const catalogSlice = createSlice({
             state.status = 'idle'
         });
         builder.addCase(fetchFilters.rejected, (state, action) => {
-            console.log(action.payload)
+
             state.status = 'idle'
         })
     })
 })
 
 export const productSelectors = productsAdaptor.getSelectors((state: RootState) => state.catalog);
-export const { setProductParams, resetProductParams, setMetaData, setPageNumber } = catalogSlice.actions;
+export const { setProductParams, resetProductParams, setMetaData, setPageNumber, setProduct, removeProduct } = catalogSlice.actions;

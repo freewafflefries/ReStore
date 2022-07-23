@@ -1,4 +1,6 @@
 import { Box, Typography, Pagination } from "@material-ui/core";
+import { useState } from "react";
+import { setPageNumber } from "../../features/catalog/catalogSlice";
 import LoadingComponent from "../layout/LoadingComponent";
 import { MetaData } from "../models/pagination";
 
@@ -11,7 +13,13 @@ interface Props {
 export default function AppPagination({ metaData, onPageChange }: Props) {
 
     const { currentPage, totalPages, totalCount, pageSize } = metaData
-    console.log('metadata in app pagination', metaData)
+    const [pageNumber, setPageNumber] = useState(currentPage)
+
+
+    function handlePageChange(page: number) {
+        setPageNumber(page)
+        onPageChange(page)
+    }
 
     if (!metaData) {
         return (
@@ -28,8 +36,8 @@ export default function AppPagination({ metaData, onPageChange }: Props) {
                 color='secondary'
                 size="small"
                 count={totalPages}
-                page={currentPage}
-                onChange={(e, page) => onPageChange(page)}
+                page={pageNumber}
+                onChange={(e, page) => handlePageChange(page)}
             />
         </Box>
     )
