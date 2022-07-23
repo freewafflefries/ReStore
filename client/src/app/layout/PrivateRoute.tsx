@@ -11,7 +11,7 @@ interface Props extends RouteProps {
 }
 
 // screen if you're not yet authenticated.
-export default function PrivateRoute({ component: Component, roles, ...rest }: Props) {
+export default function PrivateRoute({ component: Component, roles = ['Member'], ...rest }: Props) {
     const { user } = useAppSelector(state => state.account)
     return (
         <Route
@@ -21,7 +21,7 @@ export default function PrivateRoute({ component: Component, roles, ...rest }: P
                     return <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
                 }
 
-                if (roles ?? !roles!.some((r: any) => user.roles?.includes(r))) {
+                if (roles && !roles?.some((r: string) => user.roles?.includes(r))) {
                     toast.error('Not authorized to access this area.')
                     return <Redirect to={{ pathname: "/catalog" }} />
                 }
